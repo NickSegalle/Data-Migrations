@@ -1,0 +1,42 @@
+#this is a comment
+#
+#this file is read by emcopy when option /sidmapfile <filename> is specified
+#each line is a single mapping record which leads emcopy to replace the sid source by the specified sid
+#There are four different types of record supported
+#SID_TO_SID, record format is : <SID source>:<SID target>
+#HSID_TO_HSID, record format is : <SID source in hexa>:<SID target in hexa>
+#ENUMTYPE, record format is : "<server name>","<account type>","<account name on source>","<SID on target>"
+#                              <server_name> and <account type> are not used by emcopy.
+#ISI_RECORD, record format is : <source server name>,{SID|HSID|GROUP|USER|NAME}:<value>,<destination server name>,{SID|HSID|GROUP|USER|NAME}:<value>
+#There is no limitation of record type directive
+#A record type directive can be folowed by several records,
+
+#next line will be discarded, no record type previously specified
+JOE,"SID":S-1-5-21-1643508158-2780356154-507200429-1010,ISILON1,SID:"S-1-5-21-3787548895-340410874-2009791390-1002"
+
+SID_TO_SID
+S-1-5-21-1643508158-2780356154-507200429-1000:S-1-5-21-3787548895-340410874-2009791390-1006
+
+HSID_TO_HSID
+S-1-5-15-61F5F1BE-A5B8DE3A-1E3B43AD-3E8:S-1-5-15-6112CBD5-8F6E3909-A3DF4B75-3E8
+
+# next line indicates a revoked SID
+S-1-5-15-61F5F1BE-A5B8DE3A-1E3B43AD-1F5:REVOKED
+
+ENUM_TYPE
+"ISILON1","User","localuser1","S-1-5-21-3787548895-340410874-2009791390-1005"
+"ISILON1","group","localgroup3","S-1-5-21-3787548895-340410874-2009791390-1004"
+
+# next line indicates a revoked SID
+"ISILON1","group","guests",REVOKED
+
+ISI_RECORD
+WSJDO,NAME:USER1,ISILON1,NAME:USER2
+WSJDO,HSID:S-1-5-15-47AF4AC5-451AE0F4-A4519B61-3E8,ISILON1,HSID:S-1-5-15-47AF4AC5-451AE0F4-A4519B61-3EF
+JOE,"SID":S-1-5-21-1643508158-2780356154-507200429-1010,ISILON1,SID:"S-1-5-21-3787548895-340410874-2009791390-1002"
+
+# next line indicates a revoked SID
+JOE,"SID":S-1-5-21-1643508158-2780356154-507200429-1010,REVOKED
+
+#next line will be discarded
+This is a Bad record

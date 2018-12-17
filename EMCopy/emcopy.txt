@@ -1,0 +1,488 @@
+========================================================================
+     CONSOLE APPLICATION : EMCOPY.EXE/EMCOPY64.EXE  04.20.02
+========================================================================
+
+Usage: EMCOPY srcdir destdir [name [name]...] [/nosec] [/o] [/a] [/dac] [/secfix]
+                [/secforce] [/hda <account>] [/lg] [/lu] [/i] [/create]
+                [/s] [/lev:n] [/d] [/de] [/sd] [/l] [/z] [/r:n] [/w:n] [/th n]
+                [/cm <content|md5>] [/sidmapfile <mapping_file>] [/ignoredhsm]
+                [/purge [/preserveroot]] [/stream] [/chunk] [/nocase] [/sdd] [/xjd] [/q]
+                [/compress <ignore|forcefile|forcedir|forceall>
+                [/trfwindow <transfer window size in MB>
+                [/ondiskfull <abort|retry|wait>
+                [/f] [/c] [/BackupSD] [/RestoreSD] [/nd:domain_name]
+                [/preserveSIDh] [/nodf]
+                [/xd dir [dir]...] [/xf file [file]...]
+
+The EMCOPY.EXE tool provides an user the way to copy a file or a
+directory and included subdirectories from and to a NTFS partition with
+security intact.
+
+The user account must grant the Backup and Restores privileges. It must
+be also a member of administrators or account operators on both the
+source and the destination computers.
+
+Emcopy.exe copies and migrate the local user and group security entries. 
+This tool does not copy the local user(s) and group(s) database from one
+computer to another. You must prior use EMC utility LGDUP.EXE if you whish
+to enable the "/lg" or the "/lu" option (local group or local user copy).
+
+The "/nosec" option disables the copy of the NT security properties of
+the file or the directory. By default, discretionary access control-lists
+are replicated on the created file or directory. This option takes priority
+on the "/o", "/a", "/lg", "/i" options.
+
+The "/secfix" option enables to update of the NT security properties
+even if the destination file or directory already exists. When destination
+object exits, security from source is merged with security from destination.
+
+The "/secforce" option enables to force update of the NT security properties
+even if the destination file or directory already exists. When destination
+object exists, security from source overwrite the destination security.
+
+The "/o" option enables the copy of a file's owner. Without this option,
+the account used for the copy will be the owner of the copied files and
+directories.
+
+The "/a" option enables the copy of auditing informations. The "Manage 
+Auditing" privilege must also be granted by the user account.
+
+The "/dac" option enables the copy of Dynamic Access Control (DAC) informations. 
+The "Manage Auditing" privilege must also be granted by the user account.
+
+The "/hda <account>" option enables the homedir migration mode. In that mode
+security information is derived from the security information of the target
+directory when it exists or from the security information of its parent
+directory.
+
+The "/lg" option enables the copy of local group security entries. Without
+this option, local group entries are ignored.
+
+The "/lu" option enables the copy of local user security entries. Without
+this option, local user entries are ignored.
+
+The "/i" option is useful to ignore security entries with local users.
+By definition, local users are only unknown for the NT server or worktstation
+where they are created. To avoid security replication error on the destination
+server, it is possible to remove this type of user in the copied properties.
+
+The "/create" creates 0 file length rather than copy the data.
+
+The "/s" option enables the copy of the subdirectories.
+
+The "/lev:n" sets the depth level of scanned directories.
+
+The "/d" option provides to copy only source files which have the 
+LAST MODIFICATION time greater than the existing target copy.
+
+The "/de" option provides to copy the source file when its last modification time
+is not equal to the destination file's modification time or when files size are
+differents.
+
+The /xjd option force emcopy to ignore directories that are mount point or DFS link. By
+default emcopy considers these kinds of directory as regular directories.
+
+The "/sd" option is to preserve the security. In this case, the file content
+is not copied if any error occurred during the security setting.
+
+The /sidmapfile <mapping_file> specifies a file that contains mapping records to be used 
+for SID translation.
+
+The /ignoredhsm option forces emcopy to remove any DHSM specific information and to remove
+the OFFLINE attribute when present.
+
+The "/l" option evaluates the number of files to copy without to do any file 
+duplication. Compares also the NT security if the "/secfix or /secforce" option
+security. In that case, the "/o" and "/a" switches are used to specify the owner
+and the audit properties comparison. When differences occur, the properties of both
+the source and destination files or directory are printed.
+
+The "/c" switch allows the process to continue after the retries.
+
+The "/z" switch is the restartable mode: the restartable mode is no more supported,
+usage of this switch doesn't have any effect.
+
+The "/r:n" option specifies the maximum number of retries. By default it is set up
+to 100.
+
+The "/w:n" option specifies the time in seconds to wait between two retries. 
+By default it is set up to 30 seconds.
+
+The "/th n" option specifies the maximum number of thread. By default it is set up
+to 64.
+
+The "/cm content" option enables a file content comparaison mode. Content of source
+and target files are binary compared after the copy or when doing an evaluation of
+the copy.
+
+The "/cm md5" option enables a file content check after the copy using md5 signatures computed
+on both source and target files.
+
+The "/purge" option enables the deletion of the files and directories from
+the destination tree which do not exist in the source one.
+
+The "/preserveroot" option enables the preservation at the root directory , when purge is option is
+set, of the files and directories from the destination tree which do not exist in the source one.
+
+The "/compress ignore" option forces emcopy to ignore the compress attribute on files
+and directories.
+
+The "/compress forcefile" option forces emcopy to set the compressed attribute on files
+
+The "/compress forcedir" option forces emcopy to set the compressed attribute on directories
+
+The "/compress forceall" option forces emcopy to set the compressed attribute on files
+and directories.
+
+The "/sdd" option forces the target directory's dates to be synchronized
+with the source directory's dates.
+
+The "/stream" option enables the copie of files and directories datastreams.
+Without that option only the main datastream of files are copied.
+
+The "/log:filename" option allows to redirect the console messages to a new file.
+The "/log+:filename" option appends the new messages to an existing file.
+The "/u" option force logfile to be filled up with unicode character set.
+
+The "/q" switch allows the user to disable the print of the files on stdout.
+
+The "/f" switch allows the user to ask for the fullpath print, both the source and
+the destination paths are printed. By default, only the source path is printed.
+
+The "/BackupSD" and "/RestoreSD" switches allow to backup and restore the security
+properties without copying the file content. There is no local group translation and
+local SID suppression.
+
+The "/nd:domain_name" switch allow to translate SD using new domain domain_name instead of 
+original domain.
+
+The "/preserverSIDh" switch allow to preserve SID from previous domain. By default emcopy 
+replace obsolete SID by corresponding SID in current domain.
+
+The "/nodf switch allow to only do a name filtering on file. By default directories and files
+are processed only if they feet with the list of names that are specified in the command line.
+
+The "/xd dir [dir ...] switch allow to excludes directories with the specified
+names, paths, or wildcard characters
+
+The "/xf file [file ...] switch allow to excludes files with the specified
+names, paths, or wildcard characters
+
+
+MODIFICATION HISTORY :
+----------------------
+
+01.00 :	Initial Release.
+
+01.01 :	The summary is printed even after an CTRL-C from the user.
+		The amount of copied bytes is printed in GB, MB, KB or Bytes according to
+		the number of bytes.
+		The /l options lists only the files to copy or the directories to create.
+
+01.02 : Optimizations in
+		- Setting the security descriptor by using NT_TRANSACT_CREATE SMB request.
+		- If the parent dir of the target file or directory to copy did not exist
+		  before the copy, the current target can not exist.
+		- Getting file or directory info with findfirstfile() instead of getfileinfo.
+
+02.00 : - New optional third argument which provides a list of selected files to copy.
+            Wildcards are supported in these fields.
+        
+        - New options:
+          /nosec
+          /secfix
+          /create
+          /lev:n
+          /c
+          /z
+          /r:n
+          /w:n
+          /log:filename /log+:filename
+        
+        - Exit code encoding.
+
+02.01 : - Added EMC ACEs for backup.
+        - Fixed issue: the restartable mode verifies if the source file has changed
+                       between two retries. If changed, the copy is restarting from
+                       the beginning.
+        - Bug Fixed when a local group name is equal to the server name.
+        - New SID cache implementation using Hash table.
+
+02.02 : - Account names are NO case sensitive.
+        - Fixed issue: when the source server is a Domain controller
+                       - the lookup for Domain sid is now running.
+                       - local user accounts can be duplicated because they 
+                         are in a domain.
+
+02.03 : - Added the /purge option.
+        - Fixed issue in DACL comparison with Generic rights.
+        - Fixed issue in Owner setting on a Security descriptor update
+        - Fixed issue in SACL comparison and print.
+        - The number of retry value is now defaulted to 100.
+
+02.04 : - Fixed issue when there is a file sharing violation error from the source
+          tree during the purge process. This caused a stop of the purge in the current
+          directory.
+
+02.04a: - Fixed issue about the comparison of the date. With the /d option, the creation date
+          is now ignored and the data of the files are updated only if the last modification
+          time of the source files is greater than the destination files.
+
+02.04b: - Fixed issue about audit replication, the "Manage auditing and security log" privilege
+          is checked when the /a (audit) switch is specified.
+
+02.05 : - XCOPY interface implementation. When you rename EMCOPY.EXE to XCOPY.EXE, the
+          tools proposes the same interface as XCOPY.EXE.
+        - Added /q (quiet) and /f (fullpath) switches.
+
+02.06 : - Added /nocase switch to create all files and directories in lower case characters.
+
+02.07 : - Added two new switches /BackupSD and /RestoreSD to allow the backup and the 
+          restore of the security descriptors without copy of file content.
+        - Added note in usage about extended attributes duplication.
+        - Builtin SID of owner are treated as other SIDs.
+        - The purge process is following the depth level.
+
+02.08 : - Take in account the prefixed local group name with the source server name,
+          format <src_server_name>_<localgroup_name>.
+
+02.09 :	- Change source and target tree scanning for performance enhancement.
+
+02.10 :	- Check and set privilege are removed when running in xcopy mode. This allow a user
+          without backup, restore and security privileges to perform a copy.
+        - Add a fix for a problem when using the /purge switch
+        - Add the /nd:domain_name switche that allow to translate ACE in domain
+          domain_name rather than in original domain
+        - Content of not empty files on the target side are no more cleared when doing
+          a copy with the /create switch.
+
+02.11 :	- Add the /preserveSIDh switche that allow to preserve previous SID instead of
+          replacing them by corresponding SID in current valid domain.
+        - Fix a problem when working in windows XP using UNC path.
+        - Suppression of the path length limitation.
+
+02.12 :	- Fix a problem when restoring SD when /RestoreSD switch is set.
+
+02.13 :	- Fix a problem in the SID migration engine.
+
+02.14 :	- Fix a performance issue when copying files with application of security
+        - and without historical SID preservation.
+
+02.15 :	- Fix an issue when copying offline file. Offline file size was
+        - set to 0 after a copy.
+
+02.16 : - Added /xd and /xf  switches to exclude specified files and
+        - directories from the copy.
+
+02.17 : - SID of Deleted account are now migrated as they are when setting the
+          security information without preservation of historical SID. Lookup
+          account name for deleted account are no more done.
+
+02.18 : - Added the /lu switche to allow local user migration
+
+02.19 : - Fixed issue when the target is a standalone server and when the /o
+          option is set. In that case the default owner's sid is now the sid
+          of the user connected to the target server. The default owner's sid is
+          applied when the original owner's sid can not be migrated.
+
+02.20 : - Fixed issue when the owner's SID of the source file can not be
+          resolved and when target and source are the same machine. In That case
+          the owner's sid of the target file was set to an unvalid SID.
+
+        - Fixed issue when the group owner of a file is not set and when the /o
+          switch is set. 
+
+02.21 : - Fixed issue when the target or source resource is not connected when
+          the tool is started.
+
+02.22 : - Added the /stream option that allow the copie of files and directories
+          datastream.
+
+02.23 : - Changed the choice's strategy of the default primary group. This affect
+          emcopy when the /o option is set. The default primary group is only needed
+          when there is no way to migrate the original primary group of an object. In
+          that case the "domain user" group will be applied to the primary group of
+          the created object.
+
+02.24 : - Fixed timestamp issue when a file to copy is marked as offline. In that case
+          Creation date, Last access date and Modification date were not set to the
+          original date.
+          
+02.25 : - Fixed file inconsistency issue when the source file is partially locked for
+          read. In that case the content, the last access time and the last modification
+          time of the target file were wrong.
+
+02.26 : - Fixed issue when the source machine is a DC and security information
+          migration is requested. In that case domain user or group were considered as
+          local to the source machine. So emcopy tried to translate them as local to the
+          target machine instead of migrating them as there are.
+
+02.27 : - Fixed issue when a file when a name that will be used for 8.3 name already exists.
+          Emcopy overwrote a file when the short name generated for a file matches the name
+		  of a file in the same directory.		
+
+02.28 : - Fixed issue when more than one file filter is specified in the command line. This 
+          produced emcopy crash.
+        - Fixed issue when there is no group on at least one file or directorie on the soure.
+          This produced emcopy crash.
+        - Total transferred size greater than 2 GB is now well printed out.
+
+02.29 : - Fixed issue when a file to copy is marked as offline. In that case the created file
+          on the target was never closed.
+        - Fixed issue when the size of a file to copy is larger than 4Gb. In that case the file
+          is copied but a wrong size mismatch error is detected. This causes emcopy to stop.
+
+02.30 : - Nonexisting directory added in the middle of the target path is now supported.
+          In that case the missing directory is created. The default inherited ACL is applied
+          to the new directory.
+        - Generalized the support of UNICODE string.
+	    - Added the /u option that forces emcopy to write the log file using UNICODE character set.
+
+02.31 : - Fixed regression issue that prevents emcopy to run on a NT4 system.
+        - Added the display of the version of the system that host emcopy.
+        - Added support of the special EMC ACE type 0xa9.
+        
+03.00 : - Added embedded manifest that allows to be run on a Vista system.
+
+03.01 : - Fixed error when, in copy datastream mode, a directory with datastream is processed. In
+          that case emcopy wasn't abble to process the directory and its content.
+
+04.00 : - Changed working model from single threaded to multi threaded.
+        - Added  new options : /th n, /de, /nodf, /sdd.
+
+04.02 : - Removed restartable mode; /z option is still accepted without effect for backward comptability.
+        - Enhanced transfert retry process.
+        - Added suport of windows 6.x symbolic link.
+
+04.03 : - Introduction of a 64 bits version of emcopy : emcopy64.
+        - Memory usage enhancement.
+
+04.04 : - Fixed issue when /xd is used in conjunction with /purge.
+          In that case excluded directory could be removed from the target.
+
+04.05 : - Added /xjd option that excludes windows Moint Point from the copy.  
+        - Changed the way 8.3 files are treated. For each directory, 8.3 files are
+          processed in single thread model before any others files.
+        - Added new logging system that prevent mixed log messages.
+
+04.06 : - Fixed issue when a directory symlink is purged. emcopy doesn't 
+          follow anymore the link. The directory symlink is deleted.
+        - Fixed issue when source tree can not be browsed and purge is active.
+          The target tree is no more wrongly purged.
+        - windows seven is now recognized
+        - Added multi threaded model for the purge action.
+        
+04.07 : - Fixed issue when the name of a directory/file name on the source and target
+          side are only case different and the purge mode is activated.
+
+04.08 : - added /tee option that forces output to the console window as well as the logfile.
+        - added /chunk option that allows emcopy to use the SMB2 copy chunk feature
+        - Local groups, option /lg, and local users, option /lu, migration is now accepted
+          when doing a backup SD, option /backupSD, or when doing a restore SD, option /restoreSD.
+        - Fixed an issue when a huge count of log messages must be displayed. This sometimes
+          leads emcopy to crash when closing.
+
+04.09 : - Added local user compatibility mode for NTAP filer. The /lu option doesn't lead anymore
+          emcopy to detect an irrecoverable error when the source is a NATP filer.
+        - Fixed crash when formatting an error message related to an object that includes
+          some specials characters in its name.
+
+04.10 : - added the /secforce option that force emcopy to overwrite, instead of merge, security
+          information when destination object already exists.
+
+04.11 : - Added workaround for system that report TEMPORARY attribute for directory. This attribute
+          is no more applied on the target side.
+        - Fixed remaining cause of crash when formatting an error message related to an object that
+          includes some specials characters in its name.
+        - Changed the exclude options, /xd and /xf, behaviors. Exclude directives are now applied
+          on both source and target side. When purge is enabled and an object is in one of the
+          exclude lists, dir of file, it is no more purged from the target when it doesn't exist on
+          the source side. This is applied only when the mother directory is not itself purged.
+
+04.12 : - Added detection of DFS link. DFS links are excluded from the copy when option /xjd is set.
+          Without option /xjd DFS link are considered as regular directory.
+
+04.12B: - Added detection of wrong source local SID. When asking for local SID some old system response
+          with the SID of the joined domain instead of its own local SID. This was the cause of some SID
+          translations mismatch.
+        - Added new option /localsidsource <SIDstring> that forces emcopy to consider the given SID as
+          the source local SID.
+
+04.14:  - Fixed a bad detection of target server name. When target server name have the same prefix as the
+          local server name, the target server name was detected as the same as local server name. This
+          prevent emcopy to activate the local group and user migration.
+        - Fixed the comparison timestamp processus. Sometime source and target files with the same last
+          modification date were detected as not synchronous. This leads emcopy to perform unneeded copy
+          when doing the migration in differential mode.
+        - Added enhancement of the recovery mechanism in case of brutal abort due to client or application
+          crashes or in case of long duration loss of network. Next copy in differential mode will detect
+          inconsistent files and redo the copy.
+
+04.15:  - Fixed a copy iconsistency when source reports inconsistency in file size.  Copied file is a non
+          empty file without content when source presents a non empty file as empty when the file is opened
+          in backup mode.
+        - added option /hda <account> option that activates the homedir migration mode. In that mode security
+          information for any containers or files are derived from the target dir if it exists or from the
+          target parent dir. <account> is considered as the creator owner of any objects.
+        - Added option check mode : /cm <md5|bin>
+          bin mode forces emcopy to compare source and destination file after the copy. Usage of this option
+          reduces the overall performance of the migration. In differential mode, option /d, content of file
+          that should be identical (same date same size) are compared.
+          md5 mode forces emcopy to compute a md5 sum on the source file during its transfer. After the copy
+          a md5 sum is computed on the target file and compared to the md5 sum of the source file.
+        - Fixed display of unexpected message in the initialization phase, ERROR (1332), when the target is a
+          standalone server.
+        - Fixed bad detection of non-existent target share when the target path is given as an UNC path.
+
+04.16:  - Added copy termination when detection of error no space left on device. Migration process is 
+          aborted without retries. Not fully transfered files are deleted from the target.
+        - Added new option /sidmapfile <filename> used to specify a SID mapping file, Usage of this option is
+          allowed only when security information are migrated. Mapping file is made of three differents types
+          of line:
+             1) Comment line : line started with #
+             2) Record type directive line : a line containing only one of following keywords :
+                  SID_TO_SID	: means record format is <SID source>:<SID target>
+                  HSID_TO_HSID	: means record format is <SID source in hexa>:<SID target in hexa>
+                  ISI_RECORD	: means record format is <source server>,{SID|HSID|GROUP|USER}:<value>
+                                                        ,<target server>,{SID|HSID|GROUP|USER}:<value>
+             3) Mapping lines in the format specified by the last record type directive line.
+          There is no limitation of record type directive line.
+          A record type directive line can be followed by several records line.
+        - Added option /ignoredhsm that forces emcopy to remove any information relative to DHSM and the
+          OFFLINE attribute of all files, even for files that aren't managed by DHSM. The removal of the
+          OFFLINE attribute affects all migrated files even if, in differential mode, file content is not
+          transferred. Files that only exist on target side are not affected by the removal of the OFFLINE
+          attribute.
+
+04.16.01 :  - Fixed : emcopy could sometime crash when a log file that can't be open is specified.
+            - Fixed : owner or group SID are sometime not well migrated when a sidmapfile is used.
+
+04.16.02 :  - Added : SID revocation.Revoked SID are specified in the SID migration file by the REVOKED 
+              keyword in place of a regular target SID in mapping record, ACE relative to revoked SID are
+              discarded.
+
+04.17:  - Added : support of file and directory compressed attribute when target volume supports compression.
+        - Added : option /compress <ignore|forcefile|forcedir|forceall> which drives emcopy compress policy.
+                  Compress policy are applied only when files or directories are created.
+                  ignore      : compress attribute is ignored
+                  forcefile   : force compress attribute on every files
+                  forcedir    : force compress atribute on every directories
+                  forceall    : force compress attribute on every files and directories
+        - Added : option /trfwindow <size in MB> which specified the maximum size of the sum of all files
+                  in tranfer.
+
+04.18:  - Added : option /ondiskfull <abort|retry|wait> which drives emcopy behavior on disk full error.
+                  abort         : copy is aborted, process is terminated, this is the default behavior
+                  retry         : copy is retried in accordance with retry policies
+                  wait[,{hwm}]  : copy is restarted when enough space becomes available.
+                                  hwm is the high water mark in percentage that drives the wait state
+                                  default value for hwm is 100
+
+04.19:  - Fixed : option /compress ignore didn't work for directory.
+        - Added : option /dac which drives emcopy to migrate Dynamic Access Control information
+
+04.20.02:  - Added   : the /preserveroot option that preserve the root directory from purge. Only files and
+                       directory below the root directory are purged if necessary.
+           - Changed : set file time stamp strategy to accomodate various NAS server vendors implementation.
+
+
